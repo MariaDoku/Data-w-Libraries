@@ -1,0 +1,15 @@
+library(tidycensus)
+library(tidyverse)
+options(tigris_use_cache = TRUE)
+census_api_key("YOUR API KEY HERE")
+
+ny <- get_acs(geography = "tract", 
+              variables = "B19013_001", 
+              state = "NY", 
+              county = "New York", 
+              geometry = TRUE)
+
+ggplot(ny, aes(fill = estimate)) + 
+  geom_sf() + 
+  theme_void() + 
+  scale_fill_viridis_c(labels = scales::dollar)
