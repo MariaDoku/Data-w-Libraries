@@ -13,3 +13,39 @@ ggplot(ny, aes(fill = estimate)) +
   geom_sf() + 
   theme_void() + 
   scale_fill_viridis_c(labels = scales::dollar)
+
+#revisions below
+
+ggplot(ny, aes(fill = estimate)) + 
+  geom_sf() + 
+  theme_void() + 
+  scale_fill_viridis_c(labels = scales::dollar)
+
+
+library(sf)
+
+ny2 <- get_acs(geography = "tract", 
+              variables = "B19013_001", 
+              state = "NY", 
+              county = "New York", 
+              geometry = TRUE, 
+              cb = FALSE) 
+
+
+library(tigris)
+
+st_erase <- function(x, y) {
+  st_difference(x, st_union(y))
+}
+
+ny_water <- area_water("NY", "New York", class = "sf") 
+
+ny_erase <- st_erase(ny2, ny_water)
+
+ggplot(ny_erase, aes(fill = estimate)) + 
+  geom_sf() + 
+  theme_void() + 
+  scale_fill_viridis_c(labels = scales::dollar)
+
+library(sf)
+st_write(orange, "orange.shp")
